@@ -15,11 +15,27 @@ export const addPlayer = createAsyncThunk(
     }
 );
 
+export const deletePlayer = createAsyncThunk(
+    "players/delete",
+    async (id) => {
+        await playerService.deletePlayer(id);
+        return id;
+    }
+);
+
+export const updatePlayer = createAsyncThunk(
+    "players/update",
+    async ({ id, data }) => {
+        return await playerService.updatePlayer({ id, data });
+    }
+);
+
 const playerSlice = createSlice({
     name: "players",
     initialState: {
         list: [],
         loading: false,
+        error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -34,11 +50,20 @@ const playerSlice = createSlice({
             .addCase(addPlayer.fulfilled, (state, action) => {
                 state.list.push(action.payload);
             })
-
-
-
-    }
-})
-
+            .addCase(deletePlayer.fulfilled, (state, action) => {
+                state.list = state.list.filter(
+                    (p) => p.$id !== action.payload
+                );
+            })
+            .addCase(updatePlayer.fulfilled, (state, action) => {
+                const index = state.list.findIndex(
+                    (p) => p.$id === action.payload.$id
+                );
+                if (index !== -1) {
+                    state.list[index] = action.payload;
+                }
+            });
+    },
+});
 
 export default playerSlice.reducer;

@@ -12,11 +12,29 @@ function Navbar() {
     };
 
     return (
-        <nav className="bg-black text-white p-4 flex gap-4">
+        <nav className="bg-black text-white px-6 py-4 flex gap-6 items-center">
             <button onClick={() => navigate("/home")}>Home</button>
-            <button onClick={() => navigate("/live-auction")}>Live Auction</button>
-            <button onClick={() => navigate("/add-player")}>Add Player</button>
-            <button onClick={handleLogout}>Logout</button>
+
+            <button onClick={() => navigate("/players")}>
+                Players
+            </button>
+
+            <button onClick={() => navigate("/teams")}>
+                Teams
+            </button>
+
+            <button onClick={() => navigate("/live-auction")}>
+                Live Auction
+            </button>
+
+            <div className="ml-auto">
+                <button
+                    onClick={handleLogout}
+                    className="bg-red-600 px-4 py-1 rounded"
+                >
+                    Logout
+                </button>
+            </div>
         </nav>
     );
 }
