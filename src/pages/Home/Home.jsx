@@ -156,7 +156,7 @@ function Home() {
 
                 <ActionCard
                     title="Manage Teams"
-                    onClick={() => navigate("/add-team")}
+                    onClick={() => navigate("/team-todo")}
                 />
 
                 <ActionCard

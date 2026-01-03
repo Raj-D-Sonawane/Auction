@@ -10,6 +10,7 @@ import PlayerList from "../pages/Players/PlayerList"
 import AddTeam from "../pages/Teams/addTeam"
 import TeamList from "../pages/Teams/TeamList"
 import LiveAuction from "../pages/Auction/LiveAuction"
+import TeamTodo from "../pages/Teams/TeamTodo"
 
 
 function AppRoutes() {
@@ -61,6 +62,14 @@ function AppRoutes() {
                 <ProtectedRoute>
                     <Navbar />
                     <TeamList />
+                    <Footer />
+                </ProtectedRoute>
+            } />
+
+            <Route path="/team-todo" element={
+                <ProtectedRoute>
+                    <Navbar />
+                    <TeamTodo />
                     <Footer />
                 </ProtectedRoute>
             } />
