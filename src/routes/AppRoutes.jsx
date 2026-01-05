@@ -11,6 +11,7 @@ import AddTeam from "../pages/Teams/addTeam"
 import TeamList from "../pages/Teams/TeamList"
 import LiveAuction from "../pages/Auction/LiveAuction"
 import TeamTodo from "../pages/Teams/TeamTodo"
+import TeamSquad from "../pages/Teams/TeamSquad"
 
 
 function AppRoutes() {
@@ -81,6 +82,8 @@ function AppRoutes() {
                     <Footer />
                 </ProtectedRoute>
             } />
+
+            <Route path="/team/:teamId" element={<TeamSquad />} />
 
 
             {/* Default Route */}

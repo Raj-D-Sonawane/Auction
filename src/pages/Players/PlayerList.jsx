@@ -1,12 +1,16 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchPlayers, deletePlayer } from "../../features/players/playerSlice";
+import {
+    fetchPlayers,
+    deletePlayer,
+    updatePlayer,
+} from "../../features/players/playerSlice";
 import { useNavigate } from "react-router-dom";
 
 function PlayerList() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const { list, loading } = useAppSelector(state => state.players);
+    const { list, loading } = useAppSelector((state) => state.players);
 
     useEffect(() => {
         dispatch(fetchPlayers());
@@ -16,6 +20,25 @@ function PlayerList() {
         if (confirm("Delete this player?")) {
             dispatch(deletePlayer(id));
         }
+    };
+
+    const toggleStatus = (player) => {
+        let newStatus =
+            player.status === "sold" ? "unsold" : "sold";
+
+        dispatch(
+            updatePlayer({
+                id: player.$id,
+                data: {
+                    status: newStatus,
+                    soldTo: newStatus === "sold" ? player.soldTo || "" : "",
+                    soldPrice:
+                        newStatus === "sold"
+                            ? player.soldPrice || player.basePrice
+                            : 0,
+                },
+            })
+        );
     };
 
     if (loading) return <p>Loading...</p>;
@@ -33,31 +56,61 @@ function PlayerList() {
                 </button>
             </div>
 
-            <ul className="space-y-2">
-                {list.map(player => (
+            <ul className="space-y-3">
+                {list.map((player) => (
                     <li
                         key={player.$id}
-                        className="border p-3 flex justify-between items-center"
+                        className="border p-4 rounded flex justify-between items-center"
                     >
-                        <span>
-                            {player.name} ({player.role}) – ₹{player.basePrice}
-                        </span>
+                        {/* PLAYER INFO */}
+                        <div>
+                            <p className="font-semibold">
+                                {player.name} ({player.role})
+                            </p>
+                            <p className="text-sm text-gray-600">
+                                Base Price: ₹{player.basePrice}
+                            </p>
 
+                            {/* STATUS */}
+                            <span
+                                className={`inline-block mt-1 px-3 py-1 text-xs rounded-full font-bold
+                                ${player.status === "sold"
+                                        ? "bg-green-100 text-green-700"
+                                        : player.status === "unsold"
+                                            ? "bg-red-100 text-red-700"
+                                            : "bg-gray-200 text-gray-700"
+                                    }`}
+                            >
+                                {player.status?.toUpperCase() || "AVAILABLE"}
+                            </span>
+                        </div>
+
+                        {/* ACTIONS */}
                         <div className="flex gap-2">
-                            {/* ✏️ Edit */}
+                            {/* EDIT */}
                             <button
                                 onClick={() =>
-                                    navigate("/add-player", { state: player })
+                                    navigate("/add-player", {
+                                        state: player,
+                                    })
                                 }
-                                className="bg-yellow-500 px-3 py-1 text-white"
+                                className="bg-yellow-500 px-3 py-1 text-white rounded"
                             >
                                 Edit
                             </button>
 
-                            {/* 🗑️ Delete */}
+                            {/* STATUS CHANGE */}
+                            <button
+                                onClick={() => toggleStatus(player)}
+                                className="bg-purple-600 px-3 py-1 text-white rounded"
+                            >
+                                Mark {player.status === "sold" ? "Unsold" : "Sold"}
+                            </button>
+
+                            {/* DELETE */}
                             <button
                                 onClick={() => handleDelete(player.$id)}
-                                className="bg-red-600 px-3 py-1 text-white"
+                                className="bg-red-600 px-3 py-1 text-white rounded"
                             >
                                 Delete
                             </button>
